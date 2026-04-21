@@ -129,6 +129,8 @@
     whitelist:
       tags:
       - Wrench
+      - Screwdriver
+      - Powerdrill
       - Bottle
       - Spray
       - Soap
