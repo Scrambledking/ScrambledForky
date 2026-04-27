@@ -19,6 +19,7 @@
     ClothingOuterWinterClown: 1
     ClothingOuterWinterMime: 1
     ClothingOuterWinterMusician: 1
+    ClothingHeadHatMitreClown: 1 # Macrocosm: Moved to performer section
     ClothingOuterClownPriest: 1 # Macrocosm: Moved to performer section
 
     # Macrocosm comment - Section 2 - Costume bundles
