@@ -12,9 +12,8 @@
   startingInventory:
     DiceBag: 6
     Paper: 8
-    Pen: 4
     d6Dice: 8
-    PokerChip10000: 10
+    PokerChip10000: 10 #Funky Change - I have a gambling addiction
     ChessBoard: 1
     BackgammonBoard: 1
     ParchisBoard: 1
@@ -26,7 +25,6 @@
     GrassBattlemap: 1
     PaperCNCSheet: 6
     MysteryFigureBox: 2
-    CrayonBox: 1
     BooksBag: 3
     Magic9Ball: 2
   contrabandInventory:
