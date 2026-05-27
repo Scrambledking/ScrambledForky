@@ -148,7 +148,6 @@
       Female: UnisexAnt
       Unsexed: UnisexAnt
   - type: Damageable
-    damageContainer: Biological
     damageModifierSet: Ant
   - type: MobThresholds
     thresholds:
