@@ -34,7 +34,7 @@ public sealed partial class ReagentAutoRefillSystem : EntitySystem
         while (query.MoveNext(out var uid, out var refill, out var solutionManager))
         {
             // Try to get the solution
-            if (!_solutionContainer.TryGetSolution((uid, solutionManager), refill.Solution, out var solutionEntity, out var solution))
+            if (!_solutionContainer.TryGetSolution(uid, refill.Solution, out var solutionEntity, out var solution))
                 continue;
 
             // Check how much of this reagent is currently in the solution

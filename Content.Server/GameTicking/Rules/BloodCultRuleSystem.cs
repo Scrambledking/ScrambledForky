@@ -76,6 +76,7 @@ using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
+using Content.Shared.Objectives.Systems;
 using Content.Shared.Storage;
 using Content.Shared.Storage.EntitySystems;
 using Content.Shared.UserInterface;
@@ -189,6 +190,7 @@ public sealed class BloodCultRuleSystem : GameRuleSystem<BloodCultRuleComponent>
 	[Dependency] private ActionContainerSystem _actionContainer = default!;
 	[Dependency] private SharedPointLightSystem _pointLight = default!;
 	[Dependency] private SharedUserInterfaceSystem _uiSystem = default!;
+    [Dependency] private readonly TargetSystem _target = default!;
 
 	public readonly string CultComponentId = "BloodCultist";
 
@@ -1224,7 +1226,7 @@ public sealed class BloodCultRuleSystem : GameRuleSystem<BloodCultRuleComponent>
 
 	private void SetConversionsNeeded(BloodCultRuleComponent component)
 	{
-		var allAliveHumans = _mind.GetAliveHumans();
+		var allAliveHumans = _target.GetAliveHumans();
 		// 10% cult needed for eyes
 		component.ConversionsUntilEyes = (int)Math.Ceiling((float)allAliveHumans.Count * 0.125f);
 		// 30% cult needed for rise
@@ -1237,7 +1239,7 @@ public sealed class BloodCultRuleSystem : GameRuleSystem<BloodCultRuleComponent>
 	/// </summary>
 	private void SetMinimumCultistsForVeilRitual(BloodCultRuleComponent component)
 	{
-		var allAliveHumans = _mind.GetAliveHumans();
+		var allAliveHumans = _target.GetAliveHumans();
 		// 5% of players, minimum of 2, maximum of 4
 		// So at 20 players its 2, at 20-60 players its 3, at 60+ players its 4
 		component.MinimumCultistsForVeilRitual = Math.Max(2, Math.Min(4,(int)Math.Ceiling((float)allAliveHumans.Count * 0.05f)));
@@ -1272,7 +1274,7 @@ public sealed class BloodCultRuleSystem : GameRuleSystem<BloodCultRuleComponent>
 		);
 		foreach (EntityUid cultist in cultists)
 		{
-			if (EntityManager.TryGetComponent(cultist, out AppearanceComponent? appearance))
+			if (TryComp(cultist, out AppearanceComponent? appearance))
 			{
 				// Only enable eyes if the body has an attached head
 				var hasHead = HasComp<HumanoidProfileComponent>(cultist);

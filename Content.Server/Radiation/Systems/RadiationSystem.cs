@@ -24,6 +24,8 @@ public sealed partial class RadiationSystem : SharedRadiationSystem
     [Dependency] private EntityQuery<RadiationBlockingContainerComponent> _blockerQuery = default!;
     [Dependency] private EntityQuery<RadiationGridResistanceComponent> _resistanceQuery = default!;
     [Dependency] private EntityQuery<MapGridComponent> _gridQuery = default!;
+    private EntityQuery<TransformComponent> _xformQuery; // funky
+
 
     private float _accumulator;
     private List<SourceData> _sources = new();
