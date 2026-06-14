@@ -7,6 +7,7 @@ using Content.Shared.Verbs;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
+using System.Linq;
 
 namespace Content.Shared._Funkystation.WashingMachine;
 
@@ -23,7 +24,7 @@ public abstract class SharedWashingMachineSystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<WashingMachineComponent, StorageOpenAttemptEvent>(OnStorageOpenAttempt);
-        SubscribeLocalEvent<WashingMachineComponent, ActivateInWorldEvent>(OnActivate);
+        SubscribeLocalEvent<WashingMachineComponent, ActivateInWorldEvent>(OnActivate, before: [typeof(SharedEntityStorageSystem)]);
         SubscribeLocalEvent<WashingMachineComponent, GetVerbsEvent<ActivationVerb>>(OnGetVerbs);
     }
 
@@ -35,7 +36,10 @@ public abstract class SharedWashingMachineSystem : EntitySystem
 
     private void OnActivate(Entity<WashingMachineComponent> ent, ref ActivateInWorldEvent args)
     {
-        if (args.Handled || ent.Comp.State != WashingMachineState.Idle || !_power.IsPowered(ent.Owner) || Storage.IsOpen(ent.Owner))
+        if (args.Handled || !args.Complex)
+            return;
+
+        if (ent.Comp.State != WashingMachineState.Idle || !_power.IsPowered(ent.Owner) || Storage.IsOpen(ent.Owner))
             return;
 
         if (!TryComp<EntityStorageComponent>(ent, out var storage) || storage.Contents.ContainedEntities.Count == 0)
@@ -54,7 +58,10 @@ public abstract class SharedWashingMachineSystem : EntitySystem
 
     private void OnGetVerbs(Entity<WashingMachineComponent> ent, ref GetVerbsEvent<ActivationVerb> args)
     {
-        if (!args.CanInteract || ent.Comp.State != WashingMachineState.Idle || !_power.IsPowered(ent.Owner) || Storage.IsOpen(ent.Owner))
+        if (!args.CanInteract || !args.CanComplexInteract)
+            return;
+
+        if (ent.Comp.State != WashingMachineState.Idle || !_power.IsPowered(ent.Owner) || Storage.IsOpen(ent.Owner))
             return;
 
         if (!TryComp<EntityStorageComponent>(ent, out var storage) || storage.Contents.ContainedEntities.Count == 0)
@@ -85,7 +92,7 @@ public abstract class SharedWashingMachineSystem : EntitySystem
         if (Timing.CurTime < ent.Comp.NextWashAllowed)
             return false;
 
-        if (TryComp<EntityStorageComponent>(ent, out var storage) && storage.Contents.ContainedEntities.Count == 0)
+        if (!TryComp<EntityStorageComponent>(ent, out var storage) || storage.Contents.ContainedEntities.Count == 0)
             return false;
 
         ent.Comp.State = WashingMachineState.Washing;
@@ -94,6 +101,21 @@ public abstract class SharedWashingMachineSystem : EntitySystem
         Dirty(ent.Owner, ent.Comp);
         Appearance.SetData(ent.Owner, WashingMachineVisuals.State, WashingMachineState.Washing);
 
+        var items = storage.Contents.ContainedEntities.ToHashSet();
+
+        var machineEv = new WashingMachineStartedWashingEvent(items);
+        RaiseLocalEvent(ent.Owner, machineEv);
+
+        var itemEv = new WashingMachineIsBeingWashed(ent.Owner, items);
+        foreach (var item in items)
+        {
+            RaiseLocalEvent(item, itemEv);
+        }
+
         return true;
+    }
+
+    protected virtual void UpdateForensics(Entity<WashingMachineComponent> ent, HashSet<EntityUid> items)
+    {
     }
 }

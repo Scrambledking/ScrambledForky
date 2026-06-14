@@ -112,9 +112,11 @@ public sealed class WashingMachineSystem : SharedWashingMachineSystem
         Audio.PlayPvs(comp.WashFinishedSound, uid);
         Appearance.SetData(uid, WashingMachineVisuals.State, WashingMachineState.Idle);
 
+        HashSet<EntityUid> items = new();
         if (TryComp<EntityStorageComponent>(uid, out var storage))
         {
-            foreach (var item in storage.Contents.ContainedEntities.ToArray())
+            items = storage.Contents.ContainedEntities.ToHashSet();
+            foreach (var item in items)
             {
                 if (TryComp<StainableComponent>(item, out var stain) && _solution.TryGetSolution(item, stain.SolutionName, out var sol))
                 {
@@ -127,6 +129,17 @@ public sealed class WashingMachineSystem : SharedWashingMachineSystem
             }
         }
 
+        var machineEv = new WashingMachineFinishedWashingEvent(items);
+        RaiseLocalEvent(uid, machineEv);
+
+        var itemEv = new WashingMachineWashedEvent(uid, items);
+        foreach (var item in items)
+        {
+            RaiseLocalEvent(item, itemEv);
+        }
+
+        UpdateForensics((uid, comp), items);
+
         if (comp.AccumulatedSelfDamage > 0)
         {
             var bluntProto = _proto.Index<DamageTypePrototype>("Blunt");
@@ -137,6 +150,24 @@ public sealed class WashingMachineSystem : SharedWashingMachineSystem
 
         Dirty(uid, comp);
         Storage.OpenStorage(uid);
+    }
+
+    protected override void UpdateForensics(Entity<WashingMachineComponent> ent, HashSet<EntityUid> items)
+    {
+        if (!TryComp<ForensicsComponent>(ent.Owner, out var forensics))
+            return;
+
+        foreach (var item in items)
+        {
+            if (!TryComp<FiberComponent>(item, out var fiber))
+                continue;
+
+            var fiberText = fiber.FiberColor == null
+                ? Loc.GetString("forensic-fibers", ("material", fiber.FiberMaterial))
+                : Loc.GetString("forensic-fibers-colored", ("color", fiber.FiberColor), ("material", fiber.FiberMaterial));
+
+            forensics.Fibers.Add(fiberText);
+        }
     }
 
     private void OnBreak(Entity<WashingMachineComponent> ent, ref BreakageEventArgs args)
