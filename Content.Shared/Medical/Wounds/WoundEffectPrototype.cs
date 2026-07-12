@@ -5,7 +5,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared.Medical.Wounds;
 
-[Prototype("woundEffect")]
+[Prototype]
 public sealed partial class WoundEffectPrototype : IPrototype
 {
     [IdDataField]
