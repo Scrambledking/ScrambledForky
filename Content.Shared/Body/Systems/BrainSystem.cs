@@ -1,3 +1,4 @@
+// Baystation start
 using Content.Shared.Body.Components;
 using Content.Shared.Ghost;
 using Content.Shared.Mind;
@@ -42,3 +43,4 @@ public sealed partial class BrainSystem : EntitySystem
         args.Cancel();
     }
 }
+// Baystation end

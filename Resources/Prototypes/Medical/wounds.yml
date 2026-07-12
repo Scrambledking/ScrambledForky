@@ -1,0 +1,520 @@
+# Baystation start
+# Entity-based wound prototypes for the Baystation medical system.
+# Each wound is a full entity with a WoundEffects component
+# that references YAML-defined effect prototypes.
+
+# --- Base wound entity ---
+
+- type: entity
+  id: WoundBase
+  abstract: true
+  description: A wound.
+  components:
+  - type: Wound
+    maximumDamage: 100
+  - type: WoundEffects
+  - type: WoundDescription
+    descriptions:
+      0.0: wound-tiny
+      10.0: wound-small
+      20.0: wound-moderate
+      40.0: wound-large
+      60.0: wound-severe
+
+# --- Brute / Bruise wounds ---
+
+- type: entity
+  parent: WoundBase
+  id: WoundBruteTiny
+  name: tiny bruise
+  description: A barely visible bruise.
+  components:
+  - type: Wound
+    maximumDamage: 5
+    group: Brute
+  - type: WoundDescription
+    descriptions:
+      0.0: wound-brute-tiny
+  - type: WoundEffects
+    effects:
+    - id: PainMinute
+    - id: HealableVeryFast
+    - id: GermTracking
+
+- type: entity
+  parent: WoundBase
+  id: WoundBruteSmall
+  name: small bruise
+  description: A minor bruise.
+  components:
+  - type: Wound
+    maximumDamage: 10
+    group: Brute
+  - type: WoundDescription
+    descriptions:
+      0.0: wound-brute-small
+  - type: WoundEffects
+    effects:
+    - id: BleedingTiny
+    - id: Tendable
+    - id: HealableFast
+    - id: PainMild
+    - id: GermTracking
+
+- type: entity
+  parent: WoundBase
+  id: WoundBruteModerate
+  name: moderate bruise
+  description: A clear bruise.
+  components:
+  - type: Wound
+    maximumDamage: 20
+    group: Brute
+  - type: WoundDescription
+    descriptions:
+      0.0: wound-brute-moderate
+  - type: WoundEffects
+    effects:
+    - id: BleedingLight
+    - id: Tendable
+    - id: Clampable
+    - id: HealableMedium
+    - id: PainModerate
+    - id: GermTracking
+
+- type: entity
+  parent: WoundBase
+  id: WoundBruteLarge
+  name: large bruise
+  description: A large, dark bruise with swelling.
+  components:
+  - type: Wound
+    maximumDamage: 30
+    group: Brute
+  - type: WoundDescription
+    descriptions:
+      0.0: wound-brute-large
+  - type: WoundEffects
+    effects:
+    - id: BleedingFair
+    - id: Tendable
+    - id: Clampable
+    - id: HealableSlow
+    - id: PainNasty
+    - id: GermTracking
+
+- type: entity
+  parent: WoundBase
+  id: WoundBruteHuge
+  name: huge bruise
+  description: A massive bruise covering a large area.
+  components:
+  - type: Wound
+    maximumDamage: 50
+    group: Brute
+  - type: WoundDescription
+    descriptions:
+      0.0: wound-brute-huge
+  - type: WoundEffects
+    effects:
+    - id: BleedingHeavy
+    - id: Tendable
+    - id: Clampable
+    - id: HealableExtremelySlow
+    - id: PainSevere
+    - id: GermTracking
+
+- type: entity
+  parent: WoundBase
+  id: WoundBruteMonumental
+  name: monumental bruise
+  description: An enormous, devastating bruise.
+  components:
+  - type: Wound
+    maximumDamage: 80
+    group: Brute
+  - type: WoundDescription
+    descriptions:
+      0.0: wound-brute-monumental
+  - type: WoundEffects
+    effects:
+    - id: BleedingCritical
+    - id: Tendable
+    - id: Clampable
+    - id: HealableGlacialest
+    - id: PainHellish
+    - id: GermTracking
+
+# --- Burn wounds ---
+
+- type: entity
+  parent: WoundBase
+  id: WoundBurnSmall
+  name: minor burn
+  description: A small burn or scald.
+  components:
+  - type: Wound
+    maximumDamage: 10
+    group: Burn
+  - type: WoundDescription
+    descriptions:
+      0.0: wound-burn-small
+  - type: WoundEffects
+    effects:
+    - id: HealableFast
+    - id: PainUncomfortable
+    - id: GermTracking
+    - id: Salvable
+
+- type: entity
+  parent: WoundBase
+  id: WoundBurnModerate
+  name: moderate burn
+  description: A clear burn with blistering.
+  components:
+  - type: Wound
+    maximumDamage: 15
+    group: Burn
+  - type: WoundDescription
+    descriptions:
+      0.0: wound-burn-moderate
+  - type: WoundEffects
+    effects:
+    - id: HealableMedium
+    - id: PainBothersome
+    - id: GermTracking
+    - id: Salvable
+
+- type: entity
+  parent: WoundBase
+  id: WoundBurnLarge
+  name: large burn
+  description: A large burn with charred edges.
+  components:
+  - type: Wound
+    maximumDamage: 30
+    group: Burn
+  - type: WoundDescription
+    descriptions:
+      0.0: wound-burn-large
+  - type: WoundEffects
+    effects:
+    - id: HealableSlow
+    - id: PainPainful
+    - id: GermTracking
+    - id: Salvable
+
+- type: entity
+  parent: WoundBase
+  id: WoundBurnSevere
+  name: severe burn
+  description: A severe burn with extensive tissue damage.
+  components:
+  - type: Wound
+    maximumDamage: 40
+    group: Burn
+  - type: WoundDescription
+    descriptions:
+      0.0: wound-burn-severe
+  - type: WoundEffects
+    effects:
+    - id: HealableExtremelySlow
+    - id: PainAgonizing
+    - id: GermTracking
+    - id: Salvable
+
+- type: entity
+  parent: WoundBase
+  id: WoundBurnDeep
+  name: deep burn
+  description: A deep burn reaching underlying tissue.
+  components:
+  - type: Wound
+    maximumDamage: 50
+    group: Burn
+  - type: WoundDescription
+    descriptions:
+      0.0: wound-burn-deep
+  - type: WoundEffects
+    effects:
+    - id: HealableGlacial
+    - id: PainUnbearable
+    - id: GermTracking
+    - id: Salvable
+
+- type: entity
+  parent: WoundBase
+  id: WoundBurnCarbonised
+  name: carbonised burn
+  description: A deep burn with carbonised flesh.
+  components:
+  - type: Wound
+    maximumDamage: 80
+    group: Burn
+  - type: WoundDescription
+    descriptions:
+      0.0: wound-burn-carbonised
+  - type: WoundEffects
+    effects:
+    - id: HealableGlacialest
+    - id: PainMortal
+    - id: GermTracking
+    - id: Salvable
+
+# --- Cut wounds ---
+
+- type: entity
+  parent: WoundBase
+  id: WoundCutSmall
+  name: small cut
+  description: A small cut on the skin.
+  components:
+  - type: Wound
+    maximumDamage: 10
+    group: Cut
+  - type: WoundDescription
+    descriptions:
+      0.0: wound-cut-small
+  - type: WoundEffects
+    effects:
+    - id: BleedingSmall
+    - id: Tendable
+    - id: HealableMedium
+    - id: PainUncomfortable
+    - id: GermTracking
+
+- type: entity
+  parent: WoundBase
+  id: WoundCutDeep
+  name: deep cut
+  description: A deep cut reaching into the flesh.
+  components:
+  - type: Wound
+    maximumDamage: 15
+    group: Cut
+  - type: WoundDescription
+    descriptions:
+      0.0: wound-cut-deep
+  - type: WoundEffects
+    effects:
+    - id: BleedingModerate
+    - id: Tendable
+    - id: Clampable
+    - id: HealableModerate
+    - id: PainCutDeep
+    - id: GermTracking
+
+- type: entity
+  parent: WoundBase
+  id: WoundCutFlesh
+  name: flesh wound
+  description: A wound cutting into the flesh.
+  components:
+  - type: Wound
+    maximumDamage: 25
+    group: Cut
+  - type: WoundDescription
+    descriptions:
+      0.0: wound-cut-flesh
+  - type: WoundEffects
+    effects:
+    - id: BleedingLarge
+    - id: Tendable
+    - id: Clampable
+    - id: HealableVerySlow
+    - id: PainPainful
+    - id: GermTracking
+
+- type: entity
+  parent: WoundBase
+  id: WoundCutGaping
+  name: gaping wound
+  description: A wide, gaping wound.
+  components:
+  - type: Wound
+    maximumDamage: 50
+    group: Cut
+  - type: WoundDescription
+    descriptions:
+      0.0: wound-cut-gaping
+  - type: WoundEffects
+    effects:
+    - id: BleedingSevere
+    - id: Tendable
+    - id: Clampable
+    - id: HealableExtremelySlow
+    - id: PainAgonizing
+    - id: GermTracking
+
+- type: entity
+  parent: WoundBase
+  id: WoundCutMassive
+  name: massive wound
+  description: A massive, devastating wound.
+  components:
+  - type: Wound
+    maximumDamage: 80
+    group: Cut
+  - type: WoundDescription
+    descriptions:
+      0.0: wound-cut-massive
+  - type: WoundEffects
+    effects:
+    - id: BleedingMassive
+    - id: Tendable
+    - id: Clampable
+    - id: HealableGlacialest
+    - id: PainTorment
+    - id: GermTracking
+
+# --- Puncture wounds ---
+
+- type: entity
+  parent: WoundBase
+  id: WoundPunctureSmall
+  name: small puncture
+  description: A small puncture wound.
+  components:
+  - type: Wound
+    maximumDamage: 10
+    group: Puncture
+  - type: WoundDescription
+    descriptions:
+      0.0: wound-puncture-small
+  - type: WoundEffects
+    effects:
+    - id: BleedingLight
+    - id: Clampable
+    - id: HealableModerate
+    - id: PainPunctureSmall
+    - id: GermTracking
+
+- type: entity
+  parent: WoundBase
+  id: WoundPunctureFlesh
+  name: puncture wound
+  description: A puncture wound into the flesh.
+  components:
+  - type: Wound
+    maximumDamage: 15
+    group: Puncture
+  - type: WoundDescription
+    descriptions:
+      0.0: wound-puncture-flesh
+  - type: WoundEffects
+    effects:
+    - id: BleedingFair
+    - id: Clampable
+    - id: HealableVerySlow
+    - id: PainNasty
+    - id: GermTracking
+
+- type: entity
+  parent: WoundBase
+  id: WoundPunctureGaping
+  name: gaping puncture
+  description: A gaping puncture hole.
+  components:
+  - type: Wound
+    maximumDamage: 30
+    group: Puncture
+  - type: WoundDescription
+    descriptions:
+      0.0: wound-puncture-gaping
+  - type: WoundEffects
+    effects:
+    - id: BleedingHeavy
+    - id: Clampable
+    - id: HealableExtremelySlow
+    - id: PainSevere
+    - id: GermTracking
+
+- type: entity
+  parent: WoundBase
+  id: WoundPunctureMassive
+  name: massive puncture
+  description: A massive penetrating wound.
+  components:
+  - type: Wound
+    maximumDamage: 60
+    group: Puncture
+  - type: WoundDescription
+    descriptions:
+      0.0: wound-puncture-massive
+  - type: WoundEffects
+    effects:
+    - id: BleedingCritical
+    - id: Clampable
+    - id: HealableMolasses
+    - id: PainUnbearable
+    - id: GermTracking
+
+# --- Lost limb / Stump wounds ---
+
+- type: entity
+  parent: WoundBase
+  id: WoundStumpEdge
+  name: ripped stump
+  description: A bloody stump where a limb was torn off.
+  components:
+  - type: Wound
+    maximumDamage: 80
+    group: Stump
+    isSurgical: true
+    healPerTick: 0
+  - type: WoundDescription
+    descriptions:
+      0.0: wound-stump-edge
+  - type: WoundEffects
+    effects:
+    - id: BleedingLarge
+    - id: Tendable
+    - id: HealableNone
+    - id: PainHellish
+    - id: GermTracking
+    - id: Surgical
+
+- type: entity
+  parent: WoundBase
+  id: WoundStumpBurn
+  name: charred stump
+  description: A charred stump where a limb was burned off.
+  components:
+  - type: Wound
+    maximumDamage: 80
+    group: Stump
+    isSurgical: true
+    healPerTick: 0
+  - type: WoundDescription
+    descriptions:
+      0.0: wound-stump-burn
+  - type: WoundEffects
+    effects:
+    - id: HealableNone
+    - id: PainExcruciating
+    - id: GermTracking
+    - id: Surgical
+
+# --- Surgical incision (does not heal naturally) ---
+
+- type: entity
+  parent: WoundBase
+  id: WoundSurgicalIncision
+  name: surgical incision
+  description: A clean surgical incision.
+  components:
+  - type: Wound
+    maximumDamage: 10
+    group: Incision
+    isSurgical: true
+    healPerTick: 0
+  - type: WoundDescription
+    descriptions:
+      0.0: wound-incision
+  - type: WoundEffects
+    effects:
+    - id: HealableNone
+    - id: PainSurgical
+    - id: GermTracking
+    - id: Surgical
+# Baystation end
