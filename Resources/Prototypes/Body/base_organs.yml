@@ -1,3 +1,4 @@
+# Baystation start
 - type: markingsGroup
   id: None
   onlyGroupWhitelisted: true
@@ -498,3 +499,4 @@
     sexStateOverrides:
       Male: torso_m
       Female: torso_f
+# Baystation end

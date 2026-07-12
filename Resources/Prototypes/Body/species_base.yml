@@ -1,3 +1,4 @@
+# Baystation start
 - type: entity
   abstract: true
   parent:
@@ -151,6 +152,15 @@
     deathPenalty: 0.01 # However they really ought to be living and intact, otherwise they're worth 100x less.
   - type: RandomPrice
     maxRandomPrice: 20000
+  - type: WoundCapacity
+    defaultCapacity: 3
+    groupCapacity:
+      Brute: 3
+      Burn: 3
+      Cut: 3
+      Puncture: 3
+      Stump: 3
+      Incision: 3
   - type: Tag
     tags:
     - CanPilot
@@ -230,3 +240,4 @@
   - type: ESPainFlash # Funky, ES port
   - type: FootprintOwner # Funky change
   - type: DuoEmote # Funky change
+# Baystation end
